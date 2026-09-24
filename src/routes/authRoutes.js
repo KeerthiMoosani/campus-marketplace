@@ -4,8 +4,7 @@ const authorizeRoles = require("../middleware/roleMiddleware");
 const {
     register,
     login,
-    logout,
-    createAdmin
+    logout
 } = require("../controllers/authController");
 
 const protect = require("../middleware/authMiddleware");
@@ -29,8 +28,6 @@ router.post("/login", login);
 
 // Logout
 router.post("/logout", logout);
-
-router.post("/create-admin", createAdmin);
 
 router.get("/me", protect, authorizeRoles("USER"), (req, res) => {
     res.status(200).json({

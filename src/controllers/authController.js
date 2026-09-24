@@ -143,60 +143,9 @@ const logout = (req, res) => {
     });
 };
 
-// Create admin user (development/testing)
-const createAdmin = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Name, email and password are required"
-            });
-        }
-
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
-            return res.status(409).json({
-                success: false,
-                message: "User already exists"
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const admin = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            role: "ADMIN"
-        });
-
-        res.status(201).json({
-            success: true,
-            message: "Admin created successfully",
-            user: {
-                id: admin._id,
-                name: admin.name,
-                email: admin.email,
-                role: admin.role
-            }
-        });
-
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Admin creation failed",
-            error: error.message
-        });
-    }
-};
-
 
 module.exports = {
     register,
     login,
-    logout,
-    createAdmin
+    logout
 };
